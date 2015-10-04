@@ -41,4 +41,6 @@
 
 	<jpa:repositories base-package="com.lamaryw.web.repository"
 		entity-manager-factory-ref="emf" transaction-manager-ref="transactionManager" />
+
+	<import resource="security.xml" />
 </beans>
