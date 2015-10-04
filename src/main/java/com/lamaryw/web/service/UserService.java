@@ -2,6 +2,7 @@ package com.lamaryw.web.service;
 
 import java.util.List;
 
+import org.omg.CORBA.UnknownUserExceptionHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -16,6 +17,7 @@ import com.lamaryw.web.repository.ItemRepository;
 import com.lamaryw.web.repository.UserRepository;
 
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired
@@ -45,5 +47,9 @@ public class UserService {
 		}
 		user.setBlogs(blogs);
 		return user;
+	}
+
+	public void save(User user) {
+		userRepository.save(user);
 	}
 }
