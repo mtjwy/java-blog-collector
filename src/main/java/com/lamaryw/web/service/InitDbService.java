@@ -38,44 +38,47 @@ public class InitDbService {
 	
 	@PostConstruct
 	public void init() {
-		Role roleUser = new Role();
-		roleUser.setName("ROLE_USER");
-		roleRepository.save(roleUser);
+		if (roleRepository.findByName("ROLE_ADMIN") == null) {
+			Role roleUser = new Role();
+			roleUser.setName("ROLE_USER");
+			roleRepository.save(roleUser);
+			
+			Role roleAdmin = new Role();
+			roleAdmin.setName("ROLE_ADMIN");
+			roleRepository.save(roleAdmin);
+			
+			User userAdmin = new User();
+			userAdmin.setName("admin");
+			userAdmin.setEnabled(true);
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			userAdmin.setPassword(encoder.encode("admin"));
+			List<Role> roles = new ArrayList<Role>();
+			roles.add(roleAdmin);
+			roles.add(roleUser);
+			userAdmin.setRoles(roles);
+			userRepository.save(userAdmin);
+			
+			Blog blogSpring = new Blog();
+			blogSpring.setName("Yahoo!");
+			blogSpring.setUrl("https://yodel.yahoo.com/feed/?format=rss");
+			blogSpring.setUser(userAdmin);
+			blogRepository.save(blogSpring);
+			
+//			Item item1 = new Item();
+//			item1.setBlog(blogSpring);
+//			item1.setTitle("first");
+//			item1.setLink("https://spring.io/blog");
+//			item1.setPublishedDate(new Date());
+//			itemRepository.save(item1);
+//			
+//			Item item2 = new Item();
+//			item2.setBlog(blogSpring);
+//			item2.setTitle("second");
+//			item2.setLink("https://spring.io/blog");
+//			item2.setPublishedDate(new Date());
+//			itemRepository.save(item2);
+		}
 		
-		Role roleAdmin = new Role();
-		roleAdmin.setName("ROLE_ADMIN");
-		roleRepository.save(roleAdmin);
-		
-		User userAdmin = new User();
-		userAdmin.setName("admin");
-		userAdmin.setEnabled(true);
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		userAdmin.setPassword(encoder.encode("admin"));
-		List<Role> roles = new ArrayList<Role>();
-		roles.add(roleAdmin);
-		roles.add(roleUser);
-		userAdmin.setRoles(roles);
-		userRepository.save(userAdmin);
-		
-		Blog blogSpring = new Blog();
-		blogSpring.setName("Yahoo!");
-		blogSpring.setUrl("https://yodel.yahoo.com/feed/?format=rss");
-		blogSpring.setUser(userAdmin);
-		blogRepository.save(blogSpring);
-		
-//		Item item1 = new Item();
-//		item1.setBlog(blogSpring);
-//		item1.setTitle("first");
-//		item1.setLink("https://spring.io/blog");
-//		item1.setPublishedDate(new Date());
-//		itemRepository.save(item1);
-//		
-//		Item item2 = new Item();
-//		item2.setBlog(blogSpring);
-//		item2.setTitle("second");
-//		item2.setLink("https://spring.io/blog");
-//		item2.setPublishedDate(new Date());
-//		itemRepository.save(item2);
 		
 		
 	}
