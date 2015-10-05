@@ -1,6 +1,7 @@
 package com.lamaryw.web.controller;
 
-import org.omg.CORBA.UnknownUserExceptionHolder;
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,4 +48,10 @@ public class UserController {
 		return "redirect:/register.html?success=true";
 	}
 	
+	@RequestMapping("/account")
+	public String account(Model model, Principal principal) {//principal is an object in session, which contains the name of the user
+		String name = principal.getName();
+		model.addAttribute("user", userService.findOneWithBlogs(name));
+		return "user-detail";
+	}
 }
