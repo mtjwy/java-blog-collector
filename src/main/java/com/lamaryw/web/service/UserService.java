@@ -1,19 +1,23 @@
 package com.lamaryw.web.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lamaryw.web.entity.Blog;
 import com.lamaryw.web.entity.Item;
+import com.lamaryw.web.entity.Role;
 import com.lamaryw.web.entity.User;
 import com.lamaryw.web.repository.BlogRepository;
 import com.lamaryw.web.repository.ItemRepository;
+import com.lamaryw.web.repository.RoleRepository;
 import com.lamaryw.web.repository.UserRepository;
 
 @Service
@@ -28,6 +32,9 @@ public class UserService {
 	
 	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 	
 	public List<User> findAll() {
 		return userRepository.findAll();
@@ -50,6 +57,14 @@ public class UserService {
 	}
 
 	public void save(User user) {
+		user.setEnabled(true);
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		user.setPassword(encoder.encode(user.getPassword()));
+		
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(roleRepository.findByName("ROLE_USER"));
+		user.setRoles(roles);
+		
 		userRepository.save(user);
 	}
 }
