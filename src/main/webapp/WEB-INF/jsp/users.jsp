@@ -29,7 +29,8 @@
 			<tr>
 				<td>
 					<a href="<spring:url value="/users/${user.id}.html" />">
-						${user.name} 
+						<c:out value="${user.name}" />
+<!-- 						escape html entities in the user.name, use this tag for every single content that user creates  -->
 					</a>
 				</td>
 				
