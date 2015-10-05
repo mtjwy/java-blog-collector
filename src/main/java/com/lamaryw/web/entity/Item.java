@@ -20,6 +20,7 @@ public class Item {
 
 	private String title;
 	
+	@Column(length=10000)
 	private String description;
 	
 	@Column(name = "published_date")
